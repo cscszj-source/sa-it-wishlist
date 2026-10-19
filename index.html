@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2027 SA IT Wish List — Requirement Collection</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #1a73e8; --primary-dark: #0d47a1; --green: #0d9f4f;
+  --orange: #e8850a; --red: #d93025; --purple: #7b1fa2; --teal: #00897b;
+  --bg: #f0f2f5; --card-bg: #ffffff; --text: #333333;
+  --text-secondary: #666666; --border: #e8eaed;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08); --shadow-hover: 0 4px 20px rgba(0,0,0,0.12);
+  --radius: 12px; --gradient-wish: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+/* Header */
+.header { background: linear-gradient(135deg, #0d47a1 0%, #1a73e8 50%, #00897b 100%); color: white; padding: 48px 40px; position: relative; overflow: hidden; }
+.header::before { content: ''; position: absolute; top: -50%; right: -10%; width: 500px; height: 500px; background: rgba(255,255,255,0.05); border-radius: 50%; }
+.header::after { content: ''; position: absolute; bottom: -30%; left: 20%; width: 300px; height: 300px; background: rgba(255,255,255,0.03); border-radius: 50%; }
+.header-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+.header h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+.header p { font-size: 15px; opacity: 0.9; max-width: 700px; }
+.header-meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+.header-meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; opacity: 0.85; }
+.header-meta-item .dot { width: 8px; height: 8px; border-radius: 50%; background: #4caf50; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+.section { margin-bottom: 48px; }
+.section-title { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+.section-title h2 { font-size: 24px; font-weight: 700; color: var(--text); }
+.section-title .bar { width: 4px; height: 28px; background: var(--primary); border-radius: 2px; }
+.section-title .count { background: var(--primary); color: white; padding: 2px 12px; border-radius: 14px; font-size: 13px; font-weight: 600; }
+.section-title.wish .bar { background: #667eea; }
+.section-title.wish .count { background: #667eea; }
+
+/* Stats */
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 36px; }
+.stat-card { background: var(--card-bg); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 16px; transition: transform 0.2s, box-shadow 0.2s; }
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.stat-icon.blue { background: #e8f0fe; color: #1a73e8; }
+.stat-icon.green { background: #e6f4ea; color: #0d9f4f; }
+.stat-icon.orange { background: #fef7e0; color: #e8850a; }
+.stat-icon.purple { background: #f3e8fd; color: #7b1fa2; }
+.stat-icon.teal { background: #e0f2f1; color: #00897b; }
+.stat-info .num { font-size: 28px; font-weight: 700; line-height: 1.2; }
+.stat-info .label { font-size: 13px; color: var(--text-secondary); }
+
+/* Domain Groups */
+.domain-group { margin-bottom: 32px; }
+.domain-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+.domain-header h3 { font-size: 18px; font-weight: 600; }
+.domain-header .tag { font-size: 12px; color: var(--text-secondary); background: #f0f0f0; padding: 2px 10px; border-radius: 10px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.achievement-card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border-left: 4px solid var(--primary); transition: transform 0.2s, box-shadow 0.2s; }
+.achievement-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.achievement-card.green { border-left-color: var(--green); }
+.achievement-card.orange { border-left-color: var(--orange); }
+.achievement-card.purple { border-left-color: var(--purple); }
+.achievement-card.teal { border-left-color: var(--teal); }
+.achievement-card.red { border-left-color: var(--red); }
+.card-title { font-size: 15px; font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+.card-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.card-meta .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.badge-brand { background: #e8f0fe; color: #1a73e8; }
+.badge-proposer { background: #f0f0f0; color: #555; }
+.badge-priority { background: #fef7e0; color: #b06000; }
+.badge-date { background: #e6f4ea; color: #137333; }
+.badge-dev { background: #fef7e0; color: #b06000; }
+.badge-received { background: #f3e8fd; color: #7b1fa2; }
+.badge-confirm { background: #e8f0fe; color: #1967d2; }
+.card-progress { margin-top: 10px; font-size: 12px; color: var(--text-secondary); line-height: 1.5; max-height: 60px; overflow: hidden; position: relative; }
+.card-progress::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 20px; background: linear-gradient(transparent, white); }
+
+/* Like Button */
+.like-btn { display: inline-flex; align-items: center; gap: 4px; background: #f0f0f0; border: none; border-radius: 16px; padding: 4px 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #666; margin-top: 10px; }
+.like-btn:hover { background: #fce8e6; color: #d93025; transform: scale(1.05); }
+.like-btn.liked { background: #fce8e6; color: #d93025; }
+.like-btn.liked:hover { background: #f8d0d0; }
+.like-btn .like-icon { font-size: 14px; }
+.like-btn:disabled { cursor: default; opacity: 0.8; }
+
+/* Status Section Divider */
+.status-divider { margin: 40px 0 24px; padding: 16px 20px; border-radius: var(--radius); display: flex; align-items: center; gap: 12px; }
+.status-divider.live { background: linear-gradient(135deg, #e6f4ea, #c8e6c9); }
+.status-divider.progress { background: linear-gradient(135deg, #fff3e0, #ffe0b2); }
+.status-divider h2 { font-size: 20px; font-weight: 700; }
+.status-divider .divider-icon { font-size: 28px; }
+
+/* Tabs */
+.tabs { display: flex; gap: 4px; margin-bottom: 24px; background: var(--card-bg); border-radius: var(--radius); padding: 4px; box-shadow: var(--shadow); }
+.tab { flex: 1; padding: 14px 20px; text-align: center; cursor: pointer; border-radius: 8px; font-size: 15px; font-weight: 600; color: var(--text-secondary); transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.tab:hover { background: #f5f5f5; }
+.tab.active { background: var(--gradient-wish); color: white; }
+.tab .tab-icon { font-size: 20px; }
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Wish List Hero with IT Engineer Cartoon */
+.wish-hero { background: var(--gradient-wish); border-radius: 16px; padding: 24px 40px; color: white; margin-bottom: 24px; display: flex; align-items: center; gap: 32px; position: relative; overflow: hidden; }
+.wish-hero::before { content: ''; position: absolute; top: -60%; right: -5%; width: 400px; height: 400px; background: rgba(255,255,255,0.05); border-radius: 50%; }
+.wish-hero-text { flex: 1; position: relative; z-index: 1; }
+.wish-hero-text h2 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+.wish-hero-text p { font-size: 13px; opacity: 0.9; line-height: 1.6; }
+.wish-hero-text .emoji-row { font-size: 20px; margin-top: 10px; letter-spacing: 6px; }
+
+/* Thank You Section */
+.thank-section { background: var(--card-bg); border-radius: 16px; padding: 32px; margin-bottom: 24px; box-shadow: var(--shadow); text-align: center; }
+.thank-section h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+.thank-section p { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
+.thank-names { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.thank-name { background: var(--gradient-wish); color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; transition: transform 0.2s; }
+.thank-name:hover { transform: scale(1.05); }
+.thank-footer { margin-top: 20px; font-size: 15px; color: #667eea; font-weight: 600; }
+
+/* IT Engineer Cartoon (SVG) */
+.wish-engineer { width: 140px; height: 160px; flex-shrink: 0; position: relative; z-index: 1; }
+.wish-engineer svg { width: 100%; height: 100%; }
+
+/* Form */
+.form-section { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-group label { font-size: 14px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px; }
+.form-group label .req { color: var(--red); }
+.form-group label .opt { color: #999; font-weight: 400; font-size: 12px; }
+.form-group label .label-icon { font-size: 16px; }
+.form-group input, .form-group select, .form-group textarea { padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; background: white; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
+.form-group textarea { min-height: 120px; resize: vertical; }
+
+/* Image Upload */
+.image-upload-area { border: 2px dashed #ccc; border-radius: 8px; padding: 24px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+.image-upload-area:hover { border-color: var(--primary); background: #f8faff; }
+.image-upload-area.dragover { border-color: var(--primary); background: #e8f0fe; }
+.image-upload-area p { color: var(--text-secondary); font-size: 13px; }
+.image-upload-area .icon { font-size: 36px; margin-bottom: 8px; }
+.image-preview-container { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+.image-preview { position: relative; width: 100px; height: 100px; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; }
+.image-preview img { width: 100%; height: 100%; object-fit: cover; }
+.image-preview .remove-btn { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+
+/* Buttons */
+.form-actions { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+.btn { padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+.btn-primary { background: var(--gradient-wish); color: white; }
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-secondary { background: #f0f0f0; color: #555; }
+.btn-secondary:hover { background: #e0e0e0; }
+
+/* Submitted */
+.req-list { margin-top: 32px; }
+.req-item { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 12px; border-left: 4px solid #667eea; transition: transform 0.2s; }
+.req-item:hover { transform: translateX(2px); }
+.req-item-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px; }
+.req-item-title { font-size: 15px; font-weight: 600; }
+.req-item-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.req-item-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+.req-item-images { display: none; }
+.req-item-time { font-size: 12px; color: #999; margin-top: 8px; }
+.req-empty { text-align: center; padding: 48px; color: #999; font-size: 15px; }
+.req-empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
+
+/* Toast */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: white; padding: 14px 24px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); font-size: 14px; z-index: 9999; opacity: 0; transform: translateY(20px); transition: opacity 0.3s, transform 0.3s; }
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.error { background: var(--red); }
+
+/* Footer */
+.footer { text-align: center; padding: 32px; font-size: 13px; color: #999; }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+.modal-overlay.active { display: flex; }
+.modal-overlay img { max-width: 90%; max-height: 90%; border-radius: 8px; }
+.modal-overlay .close { position: absolute; top: 20px; right: 20px; color: white; font-size: 28px; cursor: pointer; }
+
+/* Submit Status */
+.submit-status { display: none; margin-top: 16px; padding: 12px 16px; border-radius: 8px; font-size: 13px; }
+.submit-status.show { display: block; }
+.submit-status.success { background: #e6f4ea; color: #137333; }
+.submit-status.error { background: #fce8e6; color: #c5221f; }
+.submit-status.syncing { background: #e8f0fe; color: #1967d2; }
+
+@media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .cards-grid { grid-template-columns: 1fr; } .header h1 { font-size: 24px; } .wish-hero { flex-direction: column; text-align: center; } .wish-engineer { width: 140px; height: 160px; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>🌟 2027 SA IT Wish List — Requirement Collection</h1>
+    <p>Collecting IT wishes from the South Africa subsidiary for 2027 — your input shapes our digital roadmap. Also reviewing 2026 IT achievements.</p>
+    <div class="header-meta">
+      <div class="header-meta-item"><span class="dot"></span> Data as of October 2026</div>
+      <div class="header-meta-item"><span class="dot" style="background:#ffa726"></span> Covering Geely / ZEEKR / Lynk & Co / Riddara</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="tabs">
+    <div class="tab" onclick="switchTab(event,'achievements')"><span class="tab-icon">🏆</span> 2026 IT Achievements</div>
+    <div class="tab active" onclick="switchTab(event,'requirements')"><span class="tab-icon">🌟</span> 2027 IT Wish List</div>
+  </div>
+
+  <!-- Tab 1: Achievements -->
+  <div class="tab-content" id="tab-achievements">
+    <div class="stats-row" id="statsRow"></div>
+
+    <div class="status-divider live">
+      <span class="divider-icon">✅</span>
+      <h2>Live Projects</h2>
+      <span class="count" id="onlineCount" style="background:var(--green);color:white;padding:2px 12px;border-radius:14px;font-size:13px;font-weight:600;">0</span>
+    </div>
+    <div id="achievementsContainer"></div>
+
+    <div class="status-divider progress">
+      <span class="divider-icon">🔧</span>
+      <h2>In Progress</h2>
+      <span class="count" id="progressCount" style="background:var(--orange);color:white;padding:2px 12px;border-radius:14px;font-size:13px;font-weight:600;">0</span>
+    </div>
+    <div id="progressContainer"></div>
+  </div>
+
+  <!-- Tab 2: Wish List -->
+  <div class="tab-content active" id="tab-requirements">
+
+    <div class="wish-hero">
+      <div class="wish-hero-text">
+        <h2>🌟 2027 IT Wish List 🌟</h2>
+        <p>Tell us what IT capabilities you need next year — your wishes shape our roadmap!</p>
+        <div class="emoji-row">💡 🚀 🎯 📋 ✨ 🔧</div>
+      </div>
+      <div class="wish-engineer">
+        <svg viewBox="0 0 180 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- Body -->
+          <ellipse cx="90" cy="170" rx="35" ry="25" fill="#5b6abf"/>
+          <!-- Neck -->
+          <rect x="82" y="130" width="16" height="20" fill="#f4c89a"/>
+          <!-- Head -->
+          <circle cx="90" cy="100" r="32" fill="#f4c89a"/>
+          <!-- Hair -->
+          <path d="M58 95 Q58 68 90 65 Q122 68 122 95 Q122 82 112 78 L100 75 L88 73 L76 76 L66 82 Z" fill="#3d3d3d"/>
+          <!-- Glasses -->
+          <circle cx="78" cy="100" r="10" fill="none" stroke="#333" stroke-width="2.5"/>
+          <circle cx="102" cy="100" r="10" fill="none" stroke="#333" stroke-width="2.5"/>
+          <line x1="88" y1="100" x2="92" y2="100" stroke="#333" stroke-width="2.5"/>
+          <line x1="68" y1="98" x2="62" y2="95" stroke="#333" stroke-width="2"/>
+          <line x1="112" y1="98" x2="118" y2="95" stroke="#333" stroke-width="2"/>
+          <!-- Eyes behind glasses -->
+          <circle cx="78" cy="100" r="3" fill="#333"/>
+          <circle cx="102" cy="100" r="3" fill="#333"/>
+          <!-- Smile -->
+          <path d="M80 112 Q90 118 100 112" fill="none" stroke="#8b5e3c" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Ears -->
+          <ellipse cx="59" cy="102" rx="4" ry="7" fill="#f4c89a"/>
+          <ellipse cx="121" cy="102" rx="4" ry="7" fill="#f4c89a"/>
+          <!-- Hoodie/Jacket -->
+          <path d="M55 150 Q55 140 65 135 L80 130 L100 130 L115 135 Q125 140 125 150 L125 195 L55 195 Z" fill="#5b6abf"/>
+          <!-- Hoodie strings -->
+          <line x1="85" y1="135" x2="83" y2="155" stroke="#4451a0" stroke-width="2"/>
+          <line x1="95" y1="135" x2="97" y2="155" stroke="#4451a0" stroke-width="2"/>
+          <!-- Laptop -->
+          <rect x="60" y="155" width="60" height="38" rx="3" fill="#2d2d2d"/>
+          <rect x="64" y="159" width="52" height="28" rx="2" fill="#1a73e8"/>
+          <!-- Code on screen -->
+          <text x="68" y="172" fill="#0f0" font-size="6" font-family="monospace">&lt;/&gt; IT</text>
+          <text x="68" y="180" fill="#0ff" font-size="5" font-family="monolo">WISH</text>
+          <!-- Laptop base -->
+          <rect x="55" y="193" width="70" height="5" rx="2" fill="#444"/>
+          <!-- Arms -->
+          <path d="M55 152 Q40 160 45 175 Q50 180 58 178" fill="none" stroke="#5b6abf" stroke-width="12" stroke-linecap="round"/>
+          <path d="M125 152 Q140 160 135 175 Q130 180 122 178" fill="none" stroke="#5b6abf" stroke-width="12" stroke-linecap="round"/>
+          <!-- Hands -->
+          <circle cx="50" cy="178" r="6" fill="#f4c89a"/>
+          <circle cx="130" cy="178" r="6" fill="#f4c89a"/>
+          <!-- Gear icon floating -->
+          <g transform="translate(140,50)">
+            <circle cx="0" cy="0" r="10" fill="#ffb74d" opacity="0.9"/>
+            <circle cx="0" cy="0" r="5" fill="#fff"/>
+            <rect x="-2" y="-13" width="4" height="6" fill="#ffb74d" opacity="0.9"/>
+            <rect x="-2" y="7" width="4" height="6" fill="#ffb74d" opacity="0.9"/>
+            <rect x="-13" y="-2" width="6" height="4" fill="#ffb74d" opacity="0.9"/>
+            <rect x="7" y="-2" width="6" height="4" fill="#ffb74d" opacity="0.9"/>
+          </g>
+          <!-- Star sparkles -->
+          <text x="35" y="60" fill="#ffd54f" font-size="14" opacity="0.8">✦</text>
+          <text x="150" y="120" fill="#ffd54f" font-size="10" opacity="0.7">✦</text>
+          <text x="25" y="130" fill="#fff" font-size="8" opacity="0.5">✦</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="thank-section">
+      <h3>🙏 Thank You to Our 2026 Business Partners</h3>
+      <p>These colleagues collaborated with IT throughout 2026 to deliver impactful digital solutions. We look forward to your continued support — and welcome more colleagues to join us in 2027!</p>
+      <div class="thank-names">
+        <span class="thank-name">👤 Deng Boyan</span>
+        <span class="thank-name">👤 Xue Jiahao</span>
+        <span class="thank-name">👤 Han Siguo</span>
+        <span class="thank-name">👤 Nomfundo</span>
+        <span class="thank-name">👤 Zheng Yiding</span>
+        <span class="thank-name">👤 Sun Chao</span>
+        <span class="thank-name">👤 Xane</span>
+        <span class="thank-name">👤 Wen Huihao</span>
+        <span class="thank-name">👤 Daniel Tau</span>
+        <span class="thank-name">👤 Michayla</span>
+        <span class="thank-name">👤 Onela Mtilwa</span>
+        <span class="thank-name">👤 Hu Huiying</span>
+        <span class="thank-name">👤 Zhang Houbei</span>
+        <span class="thank-name">👤 Hua Shujun</span>
+        <span class="thank-name">👤 Li Peng</span>
+        <span class="thank-name">👤 Shang Yingying</span>
+        <span class="thank-name">👤 Shi Hongmei</span>
+        <span class="thank-name">👤 Roberto</span>
+        <span class="thank-name">👤 Adrian Naidoo</span>
+      </div>
+      <div class="thank-footer">🚀 Let's keep building better IT systems together in 2027! 🚀</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title wish">
+        <div class="bar"></div>
+        <h2>📝 Submit Your IT Wish</h2>
+      </div>
+      <p style="margin-bottom:24px;color:#666;font-size:14px;">Click the button below to open our Feishu form and submit your IT wish. Your data will be saved directly to our system. 🎉</p>
+      <div style="text-align:center;padding:32px;">
+        <a href="https://geely.feishu.cn/share/base/form/shrcn5EipnPTqzvkkqXrGIlt0rg" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:white;padding:16px 40px;border-radius:12px;font-size:16px;font-weight:700;text-decoration:none;transition:all 0.2s;box-shadow:0 4px 16px rgba(102,126,234,0.3);">🚀 Open Feishu Form</a>
+        <p style="margin-top:16px;font-size:13px;color:#999;">You will be redirected to Feishu to fill in your wish. No duplicate filling needed!</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title wish">
+        <div class="bar"></div>
+        <h2>📦 Submitted Wishes</h2>
+      </div>
+      <div style="text-align:center;padding:32px;background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+        <p style="font-size:15px;color:#666;margin-bottom:16px;">All submitted wishes are stored in our Feishu Base.</p>
+        <a href="https://geely.feishu.cn/base/DaxQb8vBgaBs8wsAJgWcIq18nUb" target="_blank" style="display:inline-flex;align-items:center;gap:6px;color:#667eea;font-weight:600;text-decoration:none;font-size:14px;">📋 View all wishes in Feishu Base →</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="imageModal" onclick="closeImageModal()">
+  <span class="close">&times;</span>
+  <img id="modalImage" src="">
+</div>
+
+<div class="footer">
+  <p>2026 SA IT Annual Review & 2027 IT Wish List | Maintained by IT Team</p>
+  <p style="margin-top:4px;">Submit your wish via <a href="https://geely.feishu.cn/share/base/form/shrcn5EipnPTqzvkkqXrGIlt0rg" target="_blank" style="color:#1a73e8;">Feishu Form</a> | View <a href="https://geely.feishu.cn/base/DaxQb8vBgaBs8wsAJgWcIq18nUb" target="_blank" style="color:#1a73e8;">Feishu Base</a></p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== Live Projects (已上线) =====
+var ACHIEVEMENTS = [
+  {domain:"User Domain", title:"Embedded Financial Application & Calculator on Official Website", brand:"SA Geely", proposer:"Deng Boyan", priority:"P1", date:"2026.07", progress:"Embedded financial application entry page and calculator on the Geely official website."},
+  {domain:"User Domain", title:"Lead Capture Integration with CMS System", brand:"SA Geely", proposer:"Xue Jiahao", priority:"P1", date:"2026.07", progress:"Embedded lead capture entry on official website with CMS integration."},
+  {domain:"User Domain", title:"After-Sales Service & Dealer Network Module on Website", brand:"SA Geely", proposer:"Han Siguo", priority:"P2", date:"2026.07", progress:"Service network, manual download, accessory display, and online consultation modules launched."},
+  {domain:"User Domain", title:"Riddara Brand Pages & HR Recruitment Module", brand:"SA Geely", proposer:"Nomfundo", priority:"P1", date:"2026.07", progress:"Added Riddara brand model pages and HR recruitment module to the official website."},
+  {domain:"User Domain", title:"ZEEKR Official Website Launch in South Africa", brand:"SA ZEEKR", proposer:"Zheng Yiding", priority:"P2", date:"2026.09", progress:"ZEEKR website preview page launched on Sep 16, preparing for ZEEKR vehicle arrival in SA."},
+  {domain:"User Domain", title:"Geely Website Contact Us Page & Dealer Map Optimization", brand:"SA Geely", proposer:"Nomfundo", priority:"P1", date:"2026.07", progress:"Completed Contact Us page with vehicle models, updated dealer network map, optimized exterior color display."},
+  {domain:"Sales Domain", title:"Lynk & Co Africa Transit Trade Order Support", brand:"SA Geely", proposer:"Sun Chao", priority:"P0", date:"2026.08", progress:"Enabled transit trade ordering via Hong Kong company. Marketing system Aug 13, SAP Aug 20, Warehouse Aug 25."},
+  {domain:"Sales Domain", title:"Riddara After-Sales Warranty & Factory System Integration", brand:"SA Geely", proposer:"Deng Boyan / Xue Jiahao", priority:"P1", date:"2026.09", progress:"VIN data import plugin launched Sep 10. Riddara after-sales warranty verified and operational."},
+  {domain:"Sales Domain", title:"Internal Vehicle Type Support & OTD Allocation Control", brand:"SA Geely", proposer:"Xane", priority:"P1", date:"2026.09", progress:"Supported internal vehicles (Company/Marketing/Fleet Cars) through OTD flow with reporting."},
+  {domain:"Sales Domain", title:"Proton Offline Production Vehicle Import to Marketing System", brand:"SA Geely", proposer:"Wen Huihao", priority:"P1", date:"2026.10", progress:"1,380 historical Proton factory production orders imported. Temporary solution completed."},
+  {domain:"After-Sales Domain", title:"New Service Package Warranty Type", brand:"SA Geely", proposer:"Han Siguo / Daniel Tau", priority:"P1", date:"2026.07", progress:"Added service package warranty type with no HQ claims and differentiated parts markup. Launched Jul 7."},
+  {domain:"After-Sales Domain", title:"Store Tax ID Field on Invoices", brand:"SA Geely", proposer:"Michayla", priority:"P2", date:"2026.07", progress:"Added store tax ID field on invoices to meet South African tax compliance requirements."},
+  {domain:"After-Sales Domain", title:"Auto-Fill Claim Invoice Content", brand:"SA Geely", proposer:"Han Siguo", priority:"P2", date:"2026.07", progress:"Claim invoice download now auto-fills invoice content, reducing manual operations."},
+  {domain:"After-Sales Domain", title:"After-Sales System Support for Riddara Brand", brand:"SA Geely", proposer:"Han Siguo", priority:"P1", date:"2026.07", progress:"After-sales system fully supports Riddara brand warranty, claims, and parts operations."},
+  {domain:"After-Sales Domain", title:"Repair Service Claim to Warranty Claim Transfer Optimization", brand:"SA Geely", proposer:"Daniel", priority:"P1", date:"2026.08", progress:"Resolved repair service claims transfer issue. Short-term via market activity claim type; long-term planned."},
+  {domain:"After-Sales Domain", title:"Appointment Work Order Board & Repair Progress Dashboard", brand:"SA Geely", proposer:"Han Siguo", priority:"P2", date:"2026.10", progress:"Appointment work order board and repair progress dashboard launched Oct 13."},
+  {domain:"Logistics Domain", title:"Parts Inventory Reconciliation & 3PL Settlement", brand:"SA Geely", proposer:"Han Siguo / Li Peng", priority:"P1", date:"2026.07", progress:"April inventory count results processed. Warehouse and SAP both reconciled, SAP posted."},
+  {domain:"Finance Domain", title:"Vehicle Invoice Systemization", brand:"SA Geely", proposer:"Shang Yingying", priority:"P1", date:"2026.07", progress:"Resolved manual vehicle invoice issue. Implemented system-based invoice processing."},
+  {domain:"IT Operations", title:"Local IT Work Standards & System Training", brand:"SA Geely", proposer:"Roberto", priority:"P2", date:"2026.07", progress:"Published IT training plan and work standards to enhance local IT team capabilities."},
+];
+
+// ===== In-Progress Projects (开发中/已接收/确认中) =====
+var IN_PROGRESS = [
+  {domain:"User Domain", title:"App & Website Service Appointment Capability", brand:"SA Geely", proposer:"Han Siguo", priority:"P1", status:"In Development", progress:"ZEEKR app capability available; Geely needs fusion version. Service appointment UAT end of Oct, launch end of October."},
+  {domain:"User Domain", title:"Recruitment Page on Geely Website", brand:"SA Geely", proposer:"Onela Mtilwa", priority:"P2", status:"Confirming", progress:"Three pages: overview, position detail, application form. Reference: Geely UK website."},
+  {domain:"User Domain", title:"Google Analytics Tracking on Official Website", brand:"SA Geely", proposer:"Onela Mtilwa", priority:"P2", status:"Confirming", progress:"Preliminary requirement discussion completed. Need business to provide GTM container ID and DataLayer."},
+  {domain:"Sales Domain", title:"African Distributor Cross-Country Vehicle Purchasing", brand:"SA Geely & ZEEKR & Lynk & Co", proposer:"Xue Jiahao / Sun Chao", priority:"P1", status:"In Development", progress:"Geely launched 8.27. ZEEKR & Lynk & Co planned before end of October. Pending scheduling."},
+  {domain:"Sales Domain", title:"South Africa Key Account Orders", brand:"SA Geely", proposer:"Wen Huihao", priority:"P1", status:"In Development", progress:"Overall key account solution launched 10.22. Next: ZEEKR & Lynk key account solution."},
+  {domain:"Sales Domain", title:"Dealer Training Certification Labeling", brand:"SA Geely", proposer:"Hu Huiying / Xue Jiahao", priority:"P1", status:"Received", progress:"Discussed with business and PM. Preliminary schedule: early November."},
+  {domain:"Sales Domain", title:"Vehicle Registration System Integration", brand:"SA Geely", proposer:"Xue Jiahao", priority:"P2", status:"Confirming", progress:"Product and service provider discussing feasibility. Pending vehicle registration system API."},
+  {domain:"Sales Domain", title:"Online PR Order Generation for Dealer Procurement", brand:"SA Geely", proposer:"Wen Huihao", priority:"P1", status:"Received", progress:"Currently manual. October fully scheduled, expected November."},
+  {domain:"Sales Domain", title:"Riddara Brand FOC Order Support", brand:"SA Geely", proposer:"Michayla / Zhang Houbei", priority:"P1", status:"Received", progress:"Pending mid-October requirement analysis. Product: Zhu Jialin, Lv Qian. 10.22 version launch planned."},
+  {domain:"After-Sales Domain", title:"Proton System Integration for Parts & After-Sales", brand:"SA Geely", proposer:"Han Siguo", priority:"P1", status:"Confirming", progress:"Proton currently only has SAP. Pending Proton system launch plan. Proton requires 9.30 deployment. ACOTECH no progress."},
+  {domain:"After-Sales Domain", title:"SA Local C-End Accessory Mall", brand:"SA Geely", proposer:"Han Siguo", priority:"P2", status:"Confirming", progress:"New model — need to clarify business logic and transaction flow with HQ. Full IT capability planned: product, C-end UI, fulfillment, logistics, payment, finance."},
+  {domain:"After-Sales Domain", title:"After-Sales Business Management BI Dashboard", brand:"SA Geely", proposer:"Han Siguo", priority:"P2", status:"Confirming", progress:"Basic version available next week. Major revision planned around December, aligning requirements with HQ."},
+  {domain:"After-Sales Domain", title:"Back Order Cancel Operation Logging", brand:"SA Geely", proposer:"Michayla Thomas", priority:"P2", status:"Confirming", progress:"Business raised requirement Aug 21. Confirmed mid-November launch."},
+  {domain:"After-Sales Domain", title:"Claim Type Repair Work Order Invoicing", brand:"SA Geely", proposer:"Han Siguo / Daniel Tau", priority:"P1", status:"Received", progress:"SA market practice: claim type repair work orders need invoices for customer signature. iRepair needs invoicing support."},
+  {domain:"After-Sales Domain", title:"Settlement Order Claim Type Query Filter", brand:"SA Geely", proposer:"Han Siguo / Daniel Tau", priority:"P2", status:"Received", progress:"Add query filter to distinguish market activity claims from regular claims — payments go to different dealer accounts."},
+  {domain:"After-Sales Domain", title:"Vehicle Search Aggregate Page", brand:"SA Geely", proposer:"Han Siguo / Daniel Tau", priority:"P2", status:"Received", progress:"After-sales aggregate vehicle search: vehicle info, warranty, work orders (hide prices), claims, quality activities, notifications."},
+  {domain:"After-Sales Domain", title:"QB Popup Hyperlink in iRepair", brand:"SA Geely", proposer:"Han Siguo / Daniel Tau", priority:"P2", status:"Received", progress:"Add hyperlinks to QB popup order numbers for service advisors and technicians to click and view details."},
+  {domain:"After-Sales Domain", title:"Case-Insensitive Vehicle Model Search in Knowledge Base", brand:"SA Geely", proposer:"Han Siguo", priority:"P2", status:"Received", progress:"Vehicle series supports manual input with case-insensitive fuzzy search."},
+  {domain:"After-Sales Domain", title:"Workshop PO Cancellation Function", brand:"SA Geely", proposer:"Michayla", priority:"P3", status:"Received", progress:"Solve the problem of only being able to fix via data refresh."},
+  {domain:"After-Sales/Logistics", title:"SA Parts FOC Free Order Consolidation", brand:"SA Geely", proposer:"Hua Shujun", priority:"P1", status:"Confirming", progress:"Logistics plans to enable wave picking workflow. Launch planned 11.26."},
+  {domain:"Finance Domain", title:"SA Dealer Credit Limit", brand:"SA Geely", proposer:"Shang Yingying / Xue Jiahao", priority:"P2", status:"Received", progress:"Wesbank interface connected. Promoting SA request document auto-generation and credit check threshold detection."},
+  {domain:"Finance Domain", title:"Dealer Reconciliation Function", brand:"SA Geely", proposer:"Shang Yingying", priority:"P2", status:"Received", progress:"Issue identified as lock/release detail calculation difference. Fix expected Nov 21."},
+  {domain:"Finance Domain", title:"SA Parts Return Order SAP Integration", brand:"SA Geely", proposer:"Han Siguo / Michayla Thomas", priority:"P1", status:"Received", progress:"Need iParts-SAP API integration. Switch from old ZSDI_SALE_ORDER to new ZSDI003_OTD_SALES_O standard API."},
+  {domain:"BI Domain", title:"BI Lead Report — CMS to CRM Integration", brand:"SA Geely", proposer:"Shi Hongmei / Zheng Yiding", priority:"P2", status:"Received", progress:"Registered open platform with CMS's Leigh. CRM and BI aligning required data."},
+];
+
+var DOMAIN_COLORS = {"User Domain":"blue","Sales Domain":"green","After-Sales Domain":"orange","Logistics Domain":"purple","Finance Domain":"teal","IT Operations":"red","BI Domain":"blue","After-Sales/Logistics":"orange"};
+var DOMAIN_ICONS = {"User Domain":"🌐","Sales Domain":"💰","After-Sales Domain":"🔧","Logistics Domain":"📦","Finance Domain":"💼","IT Operations":"🖥️","BI Domain":"📈","After-Sales/Logistics":"🔧📦"};
+var STATUS_COLORS = {"In Development":"dev","Received":"received","Confirming":"confirm"};
+var STATUS_ICONS = {"In Development":"🔨","Received":"📥","Confirming":"🔍"};
+
+function renderStats() {
+  var allItems = ACHIEVEMENTS.concat(IN_PROGRESS);
+  var domains = {}; allItems.forEach(function(a) { domains[a.domain] = (domains[a.domain]||0)+1; });
+  var domainCount = Object.keys(domains).length;
+  var brandCount = new Set(allItems.map(function(a){return a.brand;})).size;
+  var html = '';
+  html += '<div class="stat-card"><div class="stat-icon blue">📊</div><div class="stat-info"><div class="num">'+ACHIEVEMENTS.length+'</div><div class="label">✅ Live Projects</div></div></div>';
+  html += '<div class="stat-card"><div class="stat-icon orange">🔧</div><div class="stat-info"><div class="num">'+IN_PROGRESS.length+'</div><div class="label">🔨 In Progress</div></div></div>';
+  html += '<div class="stat-card"><div class="stat-icon green">🏢</div><div class="stat-info"><div class="num">'+domainCount+'</div><div class="label">Business Domains</div></div></div>';
+  html += '<div class="stat-card"><div class="stat-icon purple">👥</div><div class="stat-info"><div class="num">'+new Set(allItems.map(function(a){return a.proposer;})).size+'</div><div class="label">Business Requesters</div></div></div>';
+  document.getElementById('statsRow').innerHTML = html;
+}
+
+function renderCards(containerId, items) {
+  var groups = {};
+  items.forEach(function(a) { if (!groups[a.domain]) groups[a.domain] = []; groups[a.domain].push(a); });
+  var html = '';
+  for (var domain in groups) {
+    var domainItems = groups[domain]; var color = DOMAIN_COLORS[domain] || 'blue';
+    var icon = DOMAIN_ICONS[domain] || '📌';
+    html += '<div class="domain-group"><div class="domain-header"><h3>'+icon+' '+domain+'</h3><span class="tag">'+domainItems.length+' project'+(domainItems.length>1?'s':'')+'</span></div>';
+    html += '<div class="cards-grid">';
+    domainItems.forEach(function(a, idx) {
+      html += '<div class="achievement-card '+color+'"><div class="card-title">'+a.title+'</div><div class="card-meta">';
+      html += '<span class="badge badge-brand">🚗 '+a.brand+'</span><span class="badge badge-proposer">👤 '+a.proposer+'</span>';
+      html += '<span class="badge badge-priority">⚡ '+a.priority+'</span>';
+      if (a.date) html += '<span class="badge badge-date">✅ Live: '+a.date+'</span>';
+      if (a.status) {
+        var sc = STATUS_COLORS[a.status] || 'confirm';
+        var si = STATUS_ICONS[a.status] || '🔍';
+        html += '<span class="badge badge-'+sc+'">'+si+' '+a.status+'</span>';
+      }
+      html += '</div><div class="card-progress">'+a.progress+'</div>';
+      var likeKey = containerId + '-' + a.domain + '-' + idx;
+      html += '<button class="like-btn" id="like-'+likeKey+'" onclick="toggleLike(\''+likeKey+'\')"><span class="like-icon">👍</span> <span class="like-count">0</span></button>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+  }
+  document.getElementById(containerId).innerHTML = html;
+}
+
+function switchTab(e, tab) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+  e.currentTarget.classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+  if (tab === 'requirements') renderReqList();
+}
+
+// ===== Image Upload =====
+var currentImages = [];
+function handleImageSelect(e) { var files = e.target.files; for (var i = 0; i < files.length; i++) { handleImageFile(files[i]); } }
+function handleImageFile(file) {
+  if (!file.type.startsWith('image/')) { showToast('Only image files are allowed', 'error'); return; }
+  if (file.size > 5 * 1024 * 1024) { showToast('Image size must be under 5MB: ' + file.name, 'error'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e) { currentImages.push({name: file.name, data: e.target.result, size: file.size}); renderImagePreviews(); };
+  reader.readAsDataURL(file);
+}
+function renderImagePreviews() {
+  var container = document.getElementById('imagePreview'); var html = '';
+  currentImages.forEach(function(img, idx) {
+    html += '<div class="image-preview"><img src="'+img.data+'" onclick="viewImage('+idx+')"><button class="remove-btn" onclick="removeImage('+idx+')">&times;</button></div>';
+  });
+  container.innerHTML = html;
+}
+function removeImage(idx) { currentImages.splice(idx, 1); renderImagePreviews(); }
+function clearImagePreviews() { currentImages = []; renderImagePreviews(); }
+var uploadArea = document.getElementById('uploadArea');
+uploadArea.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
+uploadArea.addEventListener('dragleave', function(e) { this.classList.remove('dragover'); });
+uploadArea.addEventListener('drop', function(e) { e.preventDefault(); this.classList.remove('dragover'); var files = e.dataTransfer.files; for (var i = 0; i < files.length; i++) { handleImageFile(files[i]); } });
+function viewImage(idx) { var img = currentImages[idx]; if (img) { document.getElementById('modalImage').src = img.data; document.getElementById('imageModal').classList.add('active'); } }
+function viewImageByUrl(url) { document.getElementById('modalImage').src = url; document.getElementById('imageModal').classList.add('active'); }
+function closeImageModal() { document.getElementById('imageModal').classList.remove('active'); }
+
+// ===== Submit (localStorage + Feishu link) =====
+var FEISHU_SHEET_URL = 'https://geely.feishu.cn/share/base/form/shrcn5EipnPTqzvkkqXrGIlt0rg';
+function submitRequirement(e) {
+  e.preventDefault();
+  var name = document.getElementById('r_name').value.trim();
+  var desc = document.getElementById('r_desc').value.trim();
+  if (!name || !desc) { showToast('Please fill in Name and Wish Description', 'error'); return; }
+  var brand = document.getElementById('r_brand').value;
+  var domain = document.getElementById('r_domain').value;
+  var priority = document.getElementById('r_priority').value;
+  var deadline = document.getElementById('r_deadline').value;
+  var contact = document.getElementById('r_contact').value.trim();
+  var time = new Date().toLocaleString('en-US', {timeZone:'Asia/Shanghai'});
+  var req = { id: Date.now().toString(), name: name, brand: brand, domain: domain, priority: priority, deadline: deadline, desc: desc, contact: contact, time: time, image_count: currentImages.length };
+  var list = JSON.parse(localStorage.getItem('sa_it_wishes') || '[]');
+  list.unshift(req);
+  localStorage.setItem('sa_it_wishes', JSON.stringify(list));
+  var statusEl = document.getElementById('submitStatus');
+  statusEl.className = 'submit-status show success';
+  statusEl.innerHTML = '✅ Ready to submit! Click here to open the <a href="' + FEISHU_SHEET_URL + '" target="_blank" style="color:#667eea;font-weight:700;">Feishu Form</a> and fill in your wish. Your data will be saved directly to our system. 🎉';
+  document.getElementById('reqForm').reset(); clearImagePreviews(); renderReqList();
+  setTimeout(function() { statusEl.className = 'submit-status'; }, 8000);
+  showToast('Click the Feishu Form link to submit! 🎉');
+}
+
+function renderReqList() {
+  var list = JSON.parse(localStorage.getItem('sa_it_wishes') || '[]');
+  document.getElementById('submittedCount').textContent = list.length;
+  if (list.length === 0) {
+    document.getElementById('reqList').innerHTML = '<div class="req-empty"><div class="empty-icon">🌟</div>No wishes submitted yet. Be the first to make a wish! ✨</div>';
+    return;
+  }
+  var html = '';
+  list.forEach(function(r) {
+    html += '<div class="req-item"><div class="req-item-header"><div class="req-item-title">💡 Wish from '+escapeHtml(r.name)+'</div></div>';
+    html += '<div class="req-item-meta">';
+    html += '<span class="badge badge-brand">👤 '+escapeHtml(r.name)+'</span>';
+    if (r.brand) html += '<span class="badge badge-brand">🚗 '+escapeHtml(r.brand)+'</span>';
+    if (r.domain) html += '<span class="badge badge-priority">📊 '+escapeHtml(r.domain)+'</span>';
+    if (r.priority) html += '<span class="badge badge-priority">⚡ '+escapeHtml(r.priority)+'</span>';
+    if (r.deadline) html += '<span class="badge badge-date">📅 '+escapeHtml(r.deadline)+'</span>';
+    if (r.image_count > 0) html += '<span class="badge badge-date">📸 '+r.image_count+' image'+(r.image_count>1?'s':'')+'</span>';
+    html += '</div><div class="req-item-desc">'+escapeHtml(r.desc)+'</div>';
+    if (r.contact) html += '<div class="req-item-desc" style="margin-top:4px;">📧 Contact: '+escapeHtml(r.contact)+'</div>';
+    html += '<div class="req-item-time">🕐 Submitted: '+escapeHtml(r.time)+'</div></div>';
+  });
+  document.getElementById('reqList').innerHTML = html;
+}
+
+function showToast(msg, type) { var t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast show' + (type === 'error' ? ' error' : ''); setTimeout(function() { t.classList.remove('show'); }, 3000); }
+function escapeHtml(text) { if (!text) return ''; var div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+// ===== Like Functionality (global via GitHub raw + localStorage dedup) =====
+var LIKE_KEY = 'sa_it_my_likes';
+var LIKES_RAW_URL = 'https://raw.githubusercontent.com/cscszj-source/sa-it-wishlist/main/likes.json';
+function getMyLikes() { return JSON.parse(localStorage.getItem(LIKE_KEY) || '[]'); }
+function setMyLikes(likes) { localStorage.setItem(LIKE_KEY, JSON.stringify(likes)); }
+function toggleLike(likeKey) {
+  var btn = document.getElementById('like-'+likeKey);
+  if (!btn) return;
+  var countEl = btn.querySelector('.like-count');
+  var myLikes = getMyLikes();
+  var isLiked = myLikes.indexOf(likeKey) >= 0;
+  var currentCount = parseInt(countEl.textContent) || 0;
+  if (isLiked) {
+    myLikes = myLikes.filter(function(k) { return k !== likeKey; });
+    countEl.textContent = Math.max(0, currentCount - 1);
+    btn.classList.remove('liked'); btn.querySelector('.like-icon').textContent = '👍';
+  } else {
+    myLikes.push(likeKey);
+    countEl.textContent = currentCount + 1;
+    btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️';
+  }
+  setMyLikes(myLikes);
+}
+function loadLikes() {
+  fetch(LIKES_RAW_URL + '?t=' + Date.now())
+    .then(function(r) { return r.json(); })
+    .then(function(globalLikes) {
+      var myLikes = getMyLikes();
+      document.querySelectorAll('.like-btn').forEach(function(btn) {
+        var id = btn.id.replace('like-', '');
+        var baseCount = globalLikes[id] || 0;
+        var isLiked = myLikes.indexOf(id) >= 0;
+        var count = baseCount;
+        if (isLiked && baseCount === 0) count = 1;
+        btn.querySelector('.like-count').textContent = count;
+        if (isLiked) { btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️'; }
+      });
+    })
+    .catch(function() {
+      var myLikes = getMyLikes();
+      document.querySelectorAll('.like-btn').forEach(function(btn) {
+        var id = btn.id.replace('like-', '');
+        if (myLikes.indexOf(id) >= 0) { btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️'; btn.querySelector('.like-count').textContent = '1'; }
+      });
+    });
+}
+
+// ===== Init =====
+function initPage() {
+  if (window._initDone) return;
+  window._initDone = true;
+  try { renderStats(); } catch(e) { console.error('renderStats:', e); }
+  try { renderCards('achievementsContainer', ACHIEVEMENTS); } catch(e) { console.error('renderCards achievements:', e); }
+  try { renderCards('progressContainer', IN_PROGRESS); } catch(e) { console.error('renderCards progress:', e); }
+  try { document.getElementById('onlineCount').textContent = ACHIEVEMENTS.length; } catch(e) {}
+  try { document.getElementById('progressCount').textContent = IN_PROGRESS.length; } catch(e) {}
+  try { renderReqList(); } catch(e) { console.error('renderReqList:', e); }
+  try { loadLikes(); } catch(e) { console.error('loadLikes:', e); }
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initPage);
+} else {
+  initPage();
+}
+</script>
+<script>initPage();</script>
+</body>
+</html>
