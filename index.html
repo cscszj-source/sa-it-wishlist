@@ -550,9 +550,12 @@ function renderReqList() {
 function showToast(msg, type) { var t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast show' + (type === 'error' ? ' error' : ''); setTimeout(function() { t.classList.remove('show'); }, 3000); }
 function escapeHtml(text) { if (!text) return ''; var div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
-// ===== Like Functionality (global via GitHub raw + localStorage dedup) =====
-var LIKE_KEY = 'sa_it_my_likes';
-var LIKES_RAW_URL = 'https://raw.githubusercontent.com/cscszj-source/sa-it-wishlist/main/likes.json';
+// ===== Like Functionality (global via GitHub API) =====
+// Token loaded from token.js
+var GH_REPO = 'cscszj-source/sa-it-wishlist';
+var LIKE_KEY = 'sa_wishlist_my_likes';
+var LIKES_RAW_URL = 'https://raw.githubusercontent.com/' + GH_REPO + '/main/likes.json';
+var GH_API = 'https://api.github.com/repos/' + GH_REPO + '/contents/likes.json';
 function getMyLikes() { return JSON.parse(localStorage.getItem(LIKE_KEY) || '[]'); }
 function setMyLikes(likes) { localStorage.setItem(LIKE_KEY, JSON.stringify(likes)); }
 function toggleLike(likeKey) {
@@ -561,38 +564,53 @@ function toggleLike(likeKey) {
   var countEl = btn.querySelector('.like-count');
   var myLikes = getMyLikes();
   var isLiked = myLikes.indexOf(likeKey) >= 0;
+  var action = isLiked ? 'unlike' : 'like';
   var currentCount = parseInt(countEl.textContent) || 0;
   if (isLiked) {
-    myLikes = myLikes.filter(function(k) { return k !== likeKey; });
     countEl.textContent = Math.max(0, currentCount - 1);
     btn.classList.remove('liked'); btn.querySelector('.like-icon').textContent = '👍';
   } else {
-    myLikes.push(likeKey);
     countEl.textContent = currentCount + 1;
     btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️';
   }
+  if (isLiked) { myLikes = myLikes.filter(function(k) { return k !== likeKey; }); }
+  else { myLikes.push(likeKey); }
   setMyLikes(myLikes);
+  // Sync to GitHub
+  fetch(LIKES_RAW_URL + '?t=' + Date.now())
+    .then(function(r) { return r.json(); })
+    .then(function(cur) {
+      var nc = action === 'like' ? (cur[likeKey]||0)+1 : Math.max(0,(cur[likeKey]||0)-1);
+      cur[likeKey] = nc;
+      return fetch(GH_API, { headers: { 'Authorization': 'Bearer '+GH_TOKEN, 'Accept': 'application/vnd.github+json' } })
+        .then(function(r) { return r.json(); })
+        .then(function(fd) {
+          return fetch(GH_API, {
+            method: 'PUT',
+            headers: { 'Authorization': 'Bearer '+GH_TOKEN, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'Update likes: '+likeKey+' '+action, content: btoa(JSON.stringify(cur,null,2)), sha: fd.sha })
+          });
+        });
+    })
+    .then(function() { console.log('Like synced'); })
+    .catch(function(e) { console.error('Like sync failed:', e); });
 }
 function loadLikes() {
   fetch(LIKES_RAW_URL + '?t=' + Date.now())
     .then(function(r) { return r.json(); })
-    .then(function(globalLikes) {
+    .then(function(gl) {
       var myLikes = getMyLikes();
       document.querySelectorAll('.like-btn').forEach(function(btn) {
         var id = btn.id.replace('like-', '');
-        var baseCount = globalLikes[id] || 0;
-        var isLiked = myLikes.indexOf(id) >= 0;
-        var count = baseCount;
-        if (isLiked && baseCount === 0) count = 1;
-        btn.querySelector('.like-count').textContent = count;
-        if (isLiked) { btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️'; }
+        btn.querySelector('.like-count').textContent = gl[id] || 0;
+        if (myLikes.indexOf(id) >= 0) { btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️'; }
       });
     })
     .catch(function() {
       var myLikes = getMyLikes();
       document.querySelectorAll('.like-btn').forEach(function(btn) {
         var id = btn.id.replace('like-', '');
-        if (myLikes.indexOf(id) >= 0) { btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️'; btn.querySelector('.like-count').textContent = '1'; }
+        if (myLikes.indexOf(id) >= 0) { btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️'; }
       });
     });
 }
