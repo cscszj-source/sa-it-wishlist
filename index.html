@@ -524,10 +524,12 @@ function submitRequirement(e) {
 }
 
 function renderReqList() {
+  var rl = document.getElementById('reqList');
+  if (!rl) return;
   var list = JSON.parse(localStorage.getItem('sa_it_wishes') || '[]');
   var sc = document.getElementById('submittedCount'); if (sc) sc.textContent = list.length;
   if (list.length === 0) {
-    document.getElementById('reqList').innerHTML = '<div class="req-empty"><div class="empty-icon">🌟</div>No wishes submitted yet. Be the first to make a wish! ✨</div>';
+    rl.innerHTML = '<div class="req-empty"><div class="empty-icon">🌟</div>No wishes submitted yet. Be the first to make a wish! ✨</div>';
     return;
   }
   var html = '';
@@ -544,7 +546,7 @@ function renderReqList() {
     if (r.contact) html += '<div class="req-item-desc" style="margin-top:4px;">📧 Contact: '+escapeHtml(r.contact)+'</div>';
     html += '<div class="req-item-time">🕐 Submitted: '+escapeHtml(r.time)+'</div></div>';
   });
-  document.getElementById('reqList').innerHTML = html;
+  rl.innerHTML = html;
 }
 
 function showToast(msg, type) { var t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast show' + (type === 'error' ? ' error' : ''); setTimeout(function() { t.classList.remove('show'); }, 3000); }
