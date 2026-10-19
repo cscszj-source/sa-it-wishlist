@@ -525,7 +525,7 @@ function submitRequirement(e) {
 
 function renderReqList() {
   var list = JSON.parse(localStorage.getItem('sa_it_wishes') || '[]');
-  document.getElementById('submittedCount').textContent = list.length;
+  var sc = document.getElementById('submittedCount'); if (sc) sc.textContent = list.length;
   if (list.length === 0) {
     document.getElementById('reqList').innerHTML = '<div class="req-empty"><div class="empty-icon">🌟</div>No wishes submitted yet. Be the first to make a wish! ✨</div>';
     return;
