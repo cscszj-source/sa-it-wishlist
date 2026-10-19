@@ -491,9 +491,11 @@ function renderImagePreviews() {
 function removeImage(idx) { currentImages.splice(idx, 1); renderImagePreviews(); }
 function clearImagePreviews() { currentImages = []; renderImagePreviews(); }
 var uploadArea = document.getElementById('uploadArea');
-uploadArea.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
-uploadArea.addEventListener('dragleave', function(e) { this.classList.remove('dragover'); });
-uploadArea.addEventListener('drop', function(e) { e.preventDefault(); this.classList.remove('dragover'); var files = e.dataTransfer.files; for (var i = 0; i < files.length; i++) { handleImageFile(files[i]); } });
+if (uploadArea) {
+  uploadArea.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
+  uploadArea.addEventListener('dragleave', function(e) { this.classList.remove('dragover'); });
+  uploadArea.addEventListener('drop', function(e) { e.preventDefault(); this.classList.remove('dragover'); var files = e.dataTransfer.files; for (var i = 0; i < files.length; i++) { handleImageFile(files[i]); } });
+}
 function viewImage(idx) { var img = currentImages[idx]; if (img) { document.getElementById('modalImage').src = img.data; document.getElementById('imageModal').classList.add('active'); } }
 function viewImageByUrl(url) { document.getElementById('modalImage').src = url; document.getElementById('imageModal').classList.add('active'); }
 function closeImageModal() { document.getElementById('imageModal').classList.remove('active'); }
