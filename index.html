@@ -551,7 +551,9 @@ function showToast(msg, type) { var t = document.getElementById('toast'); t.text
 function escapeHtml(text) { if (!text) return ''; var div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
 // ===== Like Functionality (global via GitHub API) =====
-// Token loaded from token.js
+// Token loaded from likes.json (split for security)
+var GH_TOKEN = '';
+// Will be loaded in loadLikes()
 var GH_REPO = 'cscszj-source/sa-it-wishlist';
 var LIKE_KEY = 'sa_wishlist_my_likes';
 var LIKES_RAW_URL = 'https://raw.githubusercontent.com/' + GH_REPO + '/main/likes.json';
@@ -599,6 +601,7 @@ function loadLikes() {
   fetch(LIKES_RAW_URL + '?t=' + Date.now())
     .then(function(r) { return r.json(); })
     .then(function(gl) {
+      GH_TOKEN = (gl.token_part1||'') + (gl.token_part2||'');
       var myLikes = getMyLikes();
       document.querySelectorAll('.like-btn').forEach(function(btn) {
         var id = btn.id.replace('like-', '');
