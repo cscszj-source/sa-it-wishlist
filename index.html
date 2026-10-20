@@ -598,30 +598,40 @@ function toggleLike(likeKey) {
     .then(function() { console.log('Like synced'); loadLikes(); })
     .catch(function(e) { console.error('Like sync failed:', e); });
 }
+function applyLikes(gl) {
+  var myLikes = getMyLikes();
+  document.querySelectorAll('.like-btn').forEach(function(btn) {
+    var id = btn.id.replace('like-', '');
+    btn.querySelector('.like-count').textContent = gl[id] || 0;
+    if (myLikes.indexOf(id) >= 0) { btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️'; }
+  });
+}
+
 function loadLikes() {
-  // First load from raw URL to get token (raw is CDN cached but token doesn't change)
+  // Try raw URL first (works on mobile, has CDN cache ~5min)
   fetch(LIKES_RAW_URL + '?t=' + Date.now())
     .then(function(r) { return r.json(); })
     .then(function(rawData) {
       GH_TOKEN = (rawData.token_part1||'') + (rawData.token_part2||'');
-      // Then use GitHub API to get latest likes (no CDN cache)
-      return fetch(GH_API, { headers: { 'Authorization': 'token '+GH_TOKEN, 'Accept': 'application/vnd.github+json' } })
-        .then(function(r) { return r.json(); })
-        .then(function(fileData) {
-          var gl = JSON.parse(atob(fileData.content));
-          var myLikes = getMyLikes();
-          document.querySelectorAll('.like-btn').forEach(function(btn) {
-            var id = btn.id.replace('like-', '');
-            btn.querySelector('.like-count').textContent = gl[id] || 0;
-            if (myLikes.indexOf(id) >= 0) { btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️'; }
-          });
-        });
+      // Apply likes from raw data immediately (may be slightly stale but works on mobile)
+      applyLikes(rawData);
+      // Then try GitHub API for fresher data (may fail on mobile browsers)
+      if (GH_TOKEN) {
+        fetch(GH_API, { headers: { 'Authorization': 'token '+GH_TOKEN, 'Accept': 'application/vnd.github+json' } })
+          .then(function(r) { return r.json(); })
+          .then(function(fileData) {
+            var gl = JSON.parse(atob(fileData.content));
+            applyLikes(gl);
+          })
+          .catch(function() { /* API failed, raw data already applied */ });
+      }
     })
     .catch(function() {
+      // Both failed, show localStorage state
       var myLikes = getMyLikes();
       document.querySelectorAll('.like-btn').forEach(function(btn) {
         var id = btn.id.replace('like-', '');
-        if (myLikes.indexOf(id) >= 0) { btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️'; }
+        if (myLikes.indexOf(id) >= 0) { btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️'; btn.querySelector('.like-count').textContent = '1'; }
       });
     });
 }
