@@ -602,8 +602,8 @@ function toggleLike(likeKey) {
       });
     })
     .then(function() { console.log('Like synced'); loadLikes(); })
-    .catch(function(e) { console.error('Like sync failed:', e); })
-    .finally(function() { btn.removeAttribute('data-syncing'); });
+    .catch(function(e) { console.error('Like sync failed:', e); });
+  // Button stays locked for this session - one like/unlike per item per session
 }
 
 function applyLikes(gl) {
