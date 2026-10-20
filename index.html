@@ -567,11 +567,16 @@ function setMyLikes(likes) { localStorage.setItem(LIKE_KEY, JSON.stringify(likes
 function toggleLike(likeKey) {
   var btn = document.getElementById('like-'+likeKey);
   if (!btn) return;
+  // Prevent clicking while a previous like/unlike is syncing
+  if (btn.getAttribute('data-syncing') === '1') return;
+  btn.setAttribute('data-syncing', '1');
+  
   var countEl = btn.querySelector('.like-count');
   var myLikes = getMyLikes();
   var isLiked = myLikes.indexOf(likeKey) >= 0;
   var action = isLiked ? 'unlike' : 'like';
   var currentCount = parseInt(countEl.textContent) || 0;
+  
   if (isLiked) {
     countEl.textContent = Math.max(0, currentCount - 1);
     btn.classList.remove('liked'); btn.querySelector('.like-icon').textContent = '👍';
@@ -582,8 +587,9 @@ function toggleLike(likeKey) {
   if (isLiked) { myLikes = myLikes.filter(function(k) { return k !== likeKey; }); }
   else { myLikes.push(likeKey); }
   setMyLikes(myLikes);
+  
   // Sync to GitHub via API (no CDN cache) to get accurate current count
-  fetch(GH_API, { headers: { 'Authorization': 'token '+GH_TOKEN, 'Accept': 'application/vnd.github+json' } })
+  fetch(GH_API, { headers: { 'Authorization': '***'+GH_TOKEN, 'Accept': 'application/vnd.github+json' } })
     .then(function(r) { return r.json(); })
     .then(function(fileData) {
       var cur = JSON.parse(atob(fileData.content));
@@ -591,13 +597,15 @@ function toggleLike(likeKey) {
       cur[likeKey] = nc;
       return fetch(GH_API, {
         method: 'PUT',
-        headers: { 'Authorization': 'token '+GH_TOKEN, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+        headers: { 'Authorization': '***'+GH_TOKEN, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: 'Update likes: '+likeKey+' '+action, content: btoa(JSON.stringify(cur,null,2)), sha: fileData.sha })
       });
     })
     .then(function() { console.log('Like synced'); loadLikes(); })
-    .catch(function(e) { console.error('Like sync failed:', e); });
+    .catch(function(e) { console.error('Like sync failed:', e); })
+    .finally(function() { btn.removeAttribute('data-syncing'); });
 }
+
 function applyLikes(gl) {
   var myLikes = getMyLikes();
   document.querySelectorAll('.like-btn').forEach(function(btn) {
