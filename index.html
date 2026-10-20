@@ -602,7 +602,7 @@ function toggleLike(likeKey) {
         body: JSON.stringify({ message: 'Update likes: '+likeKey+' '+action, content: btoa(JSON.stringify(cur,null,2)), sha: fileData.sha })
       });
     })
-    .then(function() { console.log('Like synced'); loadLikes(); })
+    .then(function() { console.log('Like synced'); })
     .catch(function(e) { console.error('Like sync failed:', e); })
     .finally(function() {
       btn.removeAttribute('data-syncing');
