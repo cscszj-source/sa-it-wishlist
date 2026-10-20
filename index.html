@@ -653,10 +653,6 @@ if (document.readyState === 'loading') {
 } else {
   initPage();
 }
-// Auto-refresh likes every 30 seconds for near real-time updates
-setInterval(function() {
-  try { loadLikes(); } catch(e) {}
-}, 30000);
 </script>
 <script>initPage();</script>
 </body>
