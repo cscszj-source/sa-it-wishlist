@@ -570,6 +570,7 @@ function toggleLike(likeKey) {
   // Prevent clicking while a previous like/unlike is syncing
   if (btn.getAttribute('data-syncing') === '1') return;
   btn.setAttribute('data-syncing', '1');
+  btn.style.opacity = '0.6';
   
   var countEl = btn.querySelector('.like-count');
   var myLikes = getMyLikes();
@@ -602,8 +603,11 @@ function toggleLike(likeKey) {
       });
     })
     .then(function() { console.log('Like synced'); loadLikes(); })
-    .catch(function(e) { console.error('Like sync failed:', e); });
-  // Button stays locked for this session - one like/unlike per item per session
+    .catch(function(e) { console.error('Like sync failed:', e); })
+    .finally(function() {
+      btn.removeAttribute('data-syncing');
+      btn.style.opacity = '1';
+    });
 }
 
 function applyLikes(gl) {
