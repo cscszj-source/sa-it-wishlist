@@ -590,7 +590,7 @@ function toggleLike(likeKey) {
   setMyLikes(myLikes);
   
   // Sync to GitHub via API (no CDN cache) to get accurate current count
-  fetch(GH_API, { headers: { 'Authorization': '***'+GH_TOKEN, 'Accept': 'application/vnd.github+json' } })
+  fetch(GH_API, { headers: { 'Authorization': 'token '+GH_TOKEN, 'Accept': 'application/vnd.github+json' } })
     .then(function(r) { return r.json(); })
     .then(function(fileData) {
       var cur = JSON.parse(atob(fileData.content));
@@ -598,7 +598,7 @@ function toggleLike(likeKey) {
       cur[likeKey] = nc;
       return fetch(GH_API, {
         method: 'PUT',
-        headers: { 'Authorization': '***'+GH_TOKEN, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+        headers: { 'Authorization': 'token '+GH_TOKEN, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: 'Update likes: '+likeKey+' '+action, content: btoa(JSON.stringify(cur,null,2)), sha: fileData.sha })
       });
     })
