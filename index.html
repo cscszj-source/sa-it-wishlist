@@ -602,16 +602,23 @@ function toggleLike(likeKey) {
     .catch(function(e) { console.error('Like sync failed:', e); });
 }
 function loadLikes() {
+  // First load from raw URL to get token (raw is CDN cached but token doesn't change)
   fetch(LIKES_RAW_URL + '?t=' + Date.now())
     .then(function(r) { return r.json(); })
-    .then(function(gl) {
-      GH_TOKEN = (gl.token_part1||'') + (gl.token_part2||'');
-      var myLikes = getMyLikes();
-      document.querySelectorAll('.like-btn').forEach(function(btn) {
-        var id = btn.id.replace('like-', '');
-        btn.querySelector('.like-count').textContent = gl[id] || 0;
-        if (myLikes.indexOf(id) >= 0) { btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️'; }
-      });
+    .then(function(rawData) {
+      GH_TOKEN = (rawData.token_part1||'') + (rawData.token_part2||'');
+      // Then use GitHub API to get latest likes (no CDN cache)
+      return fetch(GH_API, { headers: { 'Authorization': 'token '+GH_TOKEN, 'Accept': 'application/vnd.github+json' } })
+        .then(function(r) { return r.json(); })
+        .then(function(fileData) {
+          var gl = JSON.parse(atob(fileData.content));
+          var myLikes = getMyLikes();
+          document.querySelectorAll('.like-btn').forEach(function(btn) {
+            var id = btn.id.replace('like-', '');
+            btn.querySelector('.like-count').textContent = gl[id] || 0;
+            if (myLikes.indexOf(id) >= 0) { btn.classList.add('liked'); btn.querySelector('.like-icon').textContent = '❤️'; }
+          });
+        });
     })
     .catch(function() {
       var myLikes = getMyLikes();
