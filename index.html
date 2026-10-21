@@ -457,7 +457,7 @@ function renderCards(containerId, items, showScreenshots) {
         var si = STATUS_ICONS[a.status] || '🔍';
         html += '<span class="badge badge-'+sc+'">'+si+' '+a.status+'</span>';
       }
-      html += '</div><div class="card-meta"><span class="badge badge-date">📅 '+a.date+'</span></div><div class="card-progress">'+a.progress+'</div>';
+      html += '</div><div class="card-meta"><span class="badge badge-date">✅ Live: '+a.date+'</span></div><div class="card-progress">'+a.progress+'</div>';
       if (showScreenshots && SCREENSHOTS && SCREENSHOTS[a.title]) { html += '<img class="card-screenshot" src="'+SCREENSHOTS[a.title]+'" onclick="viewImageByUrl(this.src)" style="width:100%;border-radius:8px;margin-top:10px;cursor:pointer;border:1px solid #e8eaed;" loading="lazy" />'; }
       var likeKey = containerId + '-' + a.domain + '-' + idx;
       html += '<button class="like-btn" id="like-'+likeKey+'" onclick="toggleLike(\''+likeKey+'\')"><span class="like-icon">👍</span> <span class="like-count">0</span></button>';
