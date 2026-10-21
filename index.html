@@ -455,7 +455,7 @@ function renderCards(containerId, items, showScreenshots) {
         html += '<span class="badge badge-'+sc+'">'+si+' '+a.status+'</span>';
       }
       html += '</div><div class="card-progress">'+a.progress+'</div>';
-      if (showScreenshots && SCREENSHOTS && SCREENSHOTS[a.title.substring(0,40)]) { html += '<img class="card-screenshot" src="'+SCREENSHOTS[String(idx)]+'" onclick="viewImageByUrl(this.src)" style="width:100%;border-radius:8px;margin-top:10px;cursor:pointer;border:1px solid #e8eaed;" loading="lazy" />'; }
+      if (showScreenshots && SCREENSHOTS && SCREENSHOTS[a.title.substring(0,40)]) { html += '<img class="card-screenshot" src="'+SCREENSHOTS[a.title.substring(0,40)]+'" onclick="viewImageByUrl(this.src)" style="width:100%;border-radius:8px;margin-top:10px;cursor:pointer;border:1px solid #e8eaed;" loading="lazy" />'; }
       var likeKey = containerId + '-' + a.domain + '-' + idx;
       html += '<button class="like-btn" id="like-'+likeKey+'" onclick="toggleLike(\''+likeKey+'\')"><span class="like-icon">👍</span> <span class="like-count">0</span></button>';
       html += '</div>';
