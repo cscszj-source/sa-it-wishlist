@@ -451,7 +451,7 @@ function renderCards(containerId, items, showScreenshots) {
       html += '<div class="achievement-card '+color+'"><div class="card-title">'+a.title+'</div><div class="card-meta">';
       html += '<span class="badge badge-brand">🚗 '+a.brand+'</span><span class="badge badge-proposer">👤 '+a.proposer+'</span>';
       html += '<span class="badge badge-priority">⚡ '+a.priority+'</span>';
-      if (a.date) html += '<span class="badge badge-date">✅ Live: '+a.date+'</span>';
+      if (a.date) 
       if (a.status) {
         var sc = STATUS_COLORS[a.status] || 'confirm';
         var si = STATUS_ICONS[a.status] || '🔍';
