@@ -408,19 +408,19 @@ var ACHIEVEMENTS = [
   {domain:"IT Operations", title:"Local IT Work Standards & System Training", brand:"Africa Geely", proposer:"Roberto", priority:"P2", date:"2026.09", progress:"Published IT training plan and work standards to enhance local IT team capabilities."},
   {domain:"IT Operations", title:"Foreign Staff Easylink Replacement with Aquila", brand:"Multi-Brand", proposer:"Roberto", priority:"P2", date:"2026.10", progress:"Replaced Easylink with Aquila for foreign staff communication and collaboration."},
   {domain:"IT Operations", title:"Network Drive Upload Speed Optimization", brand:"Multi-Brand", proposer:"Roberto", priority:"P2", date:"2026.09", progress:"Optimized network drive upload speed for improved file sharing efficiency."},
+  {domain:"Sales Domain", title:"Africa Region Direct Sale Orders", brand:"Africa Geely", proposer:"Wen Huihao", priority:"P1", date:"2026.10", progress:"Overall direct sale solution launched 10.22. Next: ZEEKR & Lynk direct sale solution."},
+  {domain:"Sales Domain", title:"Dealer Training Certification Labeling", brand:"Africa Geely", proposer:"Hu Huiying / Xue Jiahao", priority:"P1", date:"2026.10", progress:"Discussed with business and PM. Preliminary schedule: early November."},
+  {domain:"Sales Domain", title:"Riddara Brand FOC Order Support", brand:"Africa Geely", proposer:"Michayla / Zhang Houbei", priority:"P1", date:"2026.10", progress:"10.22 version launched. Historical data pending processing."},
+  {domain:"IT Operations", title:"Marketing Materials External Sharing via Cloud Drive", brand:"Multi-Brand", proposer:"Roberto", priority:"P2", date:"2026.10", progress:"Completed training on permission request BPM steps and operation procedure."},
 ];
 
 // ===== In-Progress Projects (开发中/已接收/确认中) =====
 var IN_PROGRESS = [
   {domain:"User Domain", title:"App & Website Service Appointment Capability", brand:"Africa Geely", proposer:"Han Siguo", priority:"P1", status:"In Development", progress:"ZEEKR app capability available; Geely needs fusion version. Service appointment UAT end of Oct, launch end of October."},
   {domain:"User Domain", title:"Recruitment Page on Geely Website", brand:"Africa Geely", proposer:"Onela Mtilwa", priority:"P2", status:"Confirming", progress:"Three pages: overview, position detail, application form. Reference: Geely UK website."},
-  {domain:"User Domain", title:"Google Analytics Tracking on Official Website", brand:"Africa Geely", proposer:"Onela Mtilwa", priority:"P2", status:"Confirming", progress:"Preliminary requirement discussion completed. Need business to provide GTM container ID and DataLayer."},
-  {domain:"Sales Domain", title:"African Distributor Cross-Country Vehicle Purchasing", brand:"Africa Geely & ZEEKR & Lynk & Co", proposer:"Xue Jiahao / Sun Chao", priority:"P1", status:"In Development", progress:"Geely launched 8.27. ZEEKR & Lynk & Co planned before end of October. Pending scheduling."},
-  {domain:"Sales Domain", title:"Africa Region Direct Sale Orders", brand:"Africa Geely", proposer:"Wen Huihao", priority:"P1", status:"In Development", progress:"Overall direct sale solution launched 10.22. Next: ZEEKR & Lynk direct sale solution."},
-  {domain:"Sales Domain", title:"Dealer Training Certification Labeling", brand:"Africa Geely", proposer:"Hu Huiying / Xue Jiahao", priority:"P1", status:"Received", progress:"Discussed with business and PM. Preliminary schedule: early November."},
+  {domain:"User Domain", title:"Google Analytics Tracking on Official Website", brand:"Africa Geely", proposer:"Onela Mtilwa", priority:"P2", status:"Paused", progress:"Preliminary requirement discussion completed. Need business to provide GTM container ID and DataLayer."},
   {domain:"Sales Domain", title:"Vehicle Registration System Integration", brand:"Africa Geely", proposer:"Xue Jiahao", priority:"P2", status:"Confirming", progress:"Product and service provider discussing feasibility. Pending vehicle registration system API."},
   {domain:"Sales Domain", title:"Online PR Order Generation for Dealer Procurement", brand:"Africa Geely", proposer:"Wen Huihao", priority:"P1", status:"Received", progress:"Currently manual. October fully scheduled, expected November."},
-  {domain:"Sales Domain", title:"Riddara Brand FOC Order Support", brand:"Africa Geely", proposer:"Michayla / Zhang Houbei", priority:"P1", status:"Received", progress:"Pending mid-October requirement analysis. Product: Zhu Jialin, Lv Qian. 10.22 version launch planned."},
   {domain:"After-Sales Domain", title:"Proton System Integration for Parts & After-Sales", brand:"Africa Geely", proposer:"Han Siguo", priority:"P1", status:"Confirming", progress:"Proton currently only has SAP. Pending Proton system launch plan. Proton requires 9.30 deployment. ACOTECH no progress."},
   {domain:"After-Sales Domain", title:"Africa Local C-End Accessory Mall", brand:"Africa Geely", proposer:"Han Siguo", priority:"P2", status:"Confirming", progress:"New model — need to clarify business logic and transaction flow with HQ. Full IT capability planned: product, C-end UI, fulfillment, logistics, payment, finance."},
   {domain:"After-Sales Domain", title:"After-Sales Business Management BI Dashboard", brand:"Africa Geely", proposer:"Han Siguo", priority:"P2", status:"Confirming", progress:"Basic version available next week. Major revision planned around December, aligning requirements with HQ."},
@@ -436,12 +436,16 @@ var IN_PROGRESS = [
   {domain:"Finance Domain", title:"Dealer Reconciliation Function", brand:"Africa Geely", proposer:"Shang Yingying", priority:"P2", status:"Received", progress:"Issue identified as lock/release detail calculation difference. Fix expected Nov 21."},
   {domain:"Finance Domain", title:"Africa Parts Return Order SAP Integration", brand:"Africa Geely", proposer:"Han Siguo / Michayla Thomas", priority:"P1", status:"Received", progress:"Need iParts-SAP API integration. Switch from old ZSDI_SALE_ORDER to new ZSDI003_OTD_SALES_O standard API."},
   {domain:"BI Domain", title:"BI Lead Report — CMS to CRM Integration", brand:"Africa Geely", proposer:"Shi Hongmei / Zheng Yiding", priority:"P2", status:"Received", progress:"Registered open platform with CMS's Leigh. CRM and BI aligning required data."},
+  {domain:"Sales Domain", title:"South Africa Multi-Warehouse Operations & Allocation", brand:"Africa Geely", proposer:"Li Xinlin", priority:"P1", status:"Confirming", progress:"Currently manual accounting. Need to align with logistics and finance to define requirements."},
+  {domain:"Sales Domain", title:"Dealer Vehicle Return After Delivery", brand:"Africa Geely", proposer:"TBD", priority:"P2", status:"Confirming", progress:"2027 planning requirement. Raised by other countries."},
+  {domain:"Finance Domain", title:"Bank Receipt Auto-Reconciliation with Orders", brand:"Africa Geely", proposer:"Shang Yingying", priority:"P3", status:"Confirming", progress:"2027 planning requirement."},
+  {domain:"Finance Domain", title:"Dealer Rebate Application & Auto-Payment", brand:"Africa Geely", proposer:"Xane / Shang Yingying", priority:"P1", status:"Confirming", progress:"2027 planning requirement."},
 ];
 
 var DOMAIN_COLORS = {"User Domain":"blue","Sales Domain":"green","After-Sales Domain":"orange","Logistics Domain":"purple","Finance Domain":"teal","IT Operations":"red","BI Domain":"blue","After-Sales/Logistics":"orange"};
 var DOMAIN_ICONS = {"User Domain":"🌐","Sales Domain":"💰","After-Sales Domain":"🔧","Logistics Domain":"📦","Finance Domain":"💼","IT Operations":"🖥️","BI Domain":"📈","After-Sales/Logistics":"🔧📦"};
-var STATUS_COLORS = {"In Development":"dev","Received":"received","Confirming":"confirm"};
-var STATUS_ICONS = {"In Development":"🔨","Received":"📥","Confirming":"🔍"};
+var STATUS_COLORS = {"In Development":"dev","Received":"received","Confirming":"confirm","Paused":"confirm"};
+var STATUS_ICONS = {"In Development":"🔨","Received":"📥","Confirming":"🔍","Paused":"⏸️"};
 
 function renderStats() {
   var allItems = ACHIEVEMENTS.concat(IN_PROGRESS);
